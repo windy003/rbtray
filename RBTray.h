@@ -31,6 +31,10 @@
 #define IDM_EXIT    0x1003
 #define IDM_ABOUT   0x1004
 
+#define HOTKEY_MINIMIZE 0
+#define HOTKEY_CHROME   1
+#define HOTKEY_ANDROID_STUDIO 2
+
 #define DLLIMPORT __declspec(dllexport)
 
 BOOL DLLIMPORT RegisterHook(HMODULE);

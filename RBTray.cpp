@@ -21,6 +21,7 @@
 // ****************************************************************************
 
 #include <windows.h>
+#include <psapi.h>
 #include "RBTray.h"
 #include "resource.h"
 
@@ -28,11 +29,49 @@
 
 static UINT WM_TASKBAR_CREATED;
 
+// Function declarations
+int FindInTray(HWND hwnd);
+static void RestoreWindowFromTray(HWND hwnd);
+
 static HINSTANCE _hInstance;
 static HMODULE _hLib;
 static HWND _hwndHook;
 static HWND _hwndItems[MAXTRAYITEMS];
 static HWND _hwndForMenu;
+
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+    const wchar_t* targetProcessName = (const wchar_t*)lParam;
+    
+    DWORD processId;
+    GetWindowThreadProcessId(hwnd, &processId);
+    
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processId);
+    if (hProcess) {
+        wchar_t processPath[MAX_PATH];
+        if (GetModuleFileNameEx(hProcess, NULL, processPath, MAX_PATH)) {
+            wchar_t* processName = wcsrchr(processPath, L'\\');
+            if (processName) {
+                processName++; // Skip the backslash
+                if (_wcsicmp(processName, targetProcessName) == 0) {
+                    // Found the target process, check if it's minimized to tray
+                    int trayIndex = FindInTray(hwnd);
+                    if (trayIndex != -1) {
+                        // Window is in tray, restore it
+                        RestoreWindowFromTray(hwnd);
+                        CloseHandle(hProcess);
+                        return FALSE; // Stop enumeration
+                    }
+                }
+            }
+        }
+        CloseHandle(hProcess);
+    }
+    return TRUE; // Continue enumeration
+}
+
+void ActivateApplicationFromTray(const wchar_t* processName) {
+    EnumWindows(EnumWindowsProc, (LPARAM)processName);
+}
 
 int FindInTray(HWND hwnd) {
     for (int i = 0; i < MAXTRAYITEMS; i++) {
@@ -275,18 +314,33 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
             break;
         case WM_HOTKEY:
         {
-            HWND fgWnd = GetForegroundWindow();
-            if (!fgWnd)
-                break;
+            switch (wParam) {
+                case HOTKEY_MINIMIZE:
+                {
+                    HWND fgWnd = GetForegroundWindow();
+                    if (!fgWnd)
+                        break;
 
-            LONG style = GetWindowLong(fgWnd, GWL_STYLE);
-            if (!(style & WS_MINIMIZEBOX)) {
-                // skip, no minimize box
-                break;
+                    LONG style = GetWindowLong(fgWnd, GWL_STYLE);
+                    if (!(style & WS_MINIMIZEBOX)) {
+                        // skip, no minimize box
+                        break;
+                    }
+
+                    MinimizeWindowToTray(fgWnd);
+                    break;
+                }
+                case HOTKEY_CHROME:
+                {
+                    ActivateApplicationFromTray(L"chrome.exe");
+                    break;
+                }
+                case HOTKEY_ANDROID_STUDIO:
+                {
+                    ActivateApplicationFromTray(L"studio64.exe");
+                    break;
+                }
             }
-
-            MinimizeWindowToTray(fgWnd);
-
             break;
         }
         case WM_DESTROY:
@@ -379,9 +433,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
 
     WM_TASKBAR_CREATED = RegisterWindowMessage(L"TaskbarCreated");
 
-    BOOL registeredHotKey = RegisterHotKey(_hwndHook, 0, MOD_ALT | MOD_CONTROL, VK_DOWN);
-    if (!registeredHotKey) {
-        MessageBox(NULL, L"Couldn't register hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN);
+    BOOL registeredHotKey2 = RegisterHotKey(_hwndHook, HOTKEY_CHROME, MOD_ALT, VK_F2);
+    BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F3);
+    
+    if (!registeredHotKey1) {
+        MessageBox(NULL, L"Couldn't register Ctrl+Alt+Down hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    }
+    if (!registeredHotKey2) {
+        MessageBox(NULL, L"Couldn't register Alt+F2 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    }
+    if (!registeredHotKey3) {
+        MessageBox(NULL, L"Couldn't register Alt+F3 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
 
     MSG msg;
@@ -390,8 +453,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
         DispatchMessage(&msg);
     }
 
-    if (registeredHotKey) {
-        UnregisterHotKey(_hwndHook, 0);
+    if (registeredHotKey1) {
+        UnregisterHotKey(_hwndHook, HOTKEY_MINIMIZE);
+    }
+    if (registeredHotKey2) {
+        UnregisterHotKey(_hwndHook, HOTKEY_CHROME);
+    }
+    if (registeredHotKey3) {
+        UnregisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO);
     }
 
     return (int)msg.wParam;
