@@ -433,12 +433,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
 
     WM_TASKBAR_CREATED = RegisterWindowMessage(L"TaskbarCreated");
 
-    BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN);
+    // BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN);
+    BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT, VK_F1);
     BOOL registeredHotKey2 = RegisterHotKey(_hwndHook, HOTKEY_CHROME, MOD_ALT, VK_F2);
     BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F3);
     
     if (!registeredHotKey1) {
-        MessageBox(NULL, L"Couldn't register Ctrl+Alt+Down hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, L"Couldn't register Alt+F1 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
     if (!registeredHotKey2) {
         MessageBox(NULL, L"Couldn't register Alt+F2 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
