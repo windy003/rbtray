@@ -335,6 +335,21 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
                     ActivateApplicationFromTray(L"chrome.exe");
                     break;
                 }
+                case HOTKEY_CURSOR:
+                {
+                    ActivateApplicationFromTray(L"cursor.exe");
+                    break;
+                }
+                case HOTKEY_EXPLORER:
+                {
+                    ActivateApplicationFromTray(L"explorer.exe");
+                    break;
+                }
+                case HOTKEY_WINDOWS_TERMINAL:
+                {
+                    ActivateApplicationFromTray(L"WindowsTerminal.exe");
+                    break;
+                }
                 case HOTKEY_ANDROID_STUDIO:
                 {
                     ActivateApplicationFromTray(L"studio64.exe");
@@ -436,8 +451,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     // BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN);
     BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT, VK_F1);
     BOOL registeredHotKey2 = RegisterHotKey(_hwndHook, HOTKEY_CHROME, MOD_ALT, VK_F2);
-    BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F3);
-    
+    BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_CURSOR, MOD_ALT, VK_F3);
+    BOOL registeredHotKey4 = RegisterHotKey(_hwndHook, HOTKEY_EXPLORER, MOD_ALT, VK_F5);
+    BOOL registeredHotKey5 = RegisterHotKey(_hwndHook, HOTKEY_WINDOWS_TERMINAL, MOD_ALT, VK_F6);
+    BOOL registeredHotKey6 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F7);
     if (!registeredHotKey1) {
         MessageBox(NULL, L"Couldn't register Alt+F1 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
@@ -446,6 +463,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     }
     if (!registeredHotKey3) {
         MessageBox(NULL, L"Couldn't register Alt+F3 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    }
+    if (!registeredHotKey4) {
+        MessageBox(NULL, L"Couldn't register Alt+F5 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    }
+    if (!registeredHotKey5) {
+        MessageBox(NULL, L"Couldn't register Alt+F6 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
 
     MSG msg;
@@ -461,6 +484,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
         UnregisterHotKey(_hwndHook, HOTKEY_CHROME);
     }
     if (registeredHotKey3) {
+        UnregisterHotKey(_hwndHook, HOTKEY_CURSOR);
+    }
+    if (registeredHotKey4) {
+        UnregisterHotKey(_hwndHook, HOTKEY_EXPLORER);
+    }
+    if (registeredHotKey5) {
+        UnregisterHotKey(_hwndHook, HOTKEY_WINDOWS_TERMINAL);
+    }
+    if (registeredHotKey6) {
         UnregisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO);
     }
 

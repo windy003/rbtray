@@ -33,7 +33,11 @@
 
 #define HOTKEY_MINIMIZE 0
 #define HOTKEY_CHROME   1
-#define HOTKEY_ANDROID_STUDIO 2
+#define HOTKEY_CURSOR   2
+#define HOTKEY_EXPLORER 3
+#define HOTKEY_WINDOWS_TERMINAL 4
+#define HOTKEY_ANDROID_STUDIO 5
+
 
 #define DLLIMPORT __declspec(dllexport)
 
