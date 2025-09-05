@@ -38,6 +38,7 @@
 #define HOTKEY_WINDOWS_TERMINAL 4
 #define HOTKEY_ANDROID_STUDIO 5
 #define HOTKEY_DOUYIN 6
+#define HOTKEY_XSHELL 7
 
 #define DLLIMPORT __declspec(dllexport)
 

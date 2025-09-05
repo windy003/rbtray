@@ -360,6 +360,11 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
                     ActivateApplicationFromTray(L"douyin.exe");
                     break;
                 }
+                case HOTKEY_XSHELL:
+                {
+                    ActivateApplicationFromTray(L"Xshell.exe");
+                    break;
+                }
             }
             break;
         }
@@ -461,6 +466,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     BOOL registeredHotKey5 = RegisterHotKey(_hwndHook, HOTKEY_WINDOWS_TERMINAL, MOD_ALT, VK_F6);
     BOOL registeredHotKey6 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F7);
     BOOL registeredHotKey7 = RegisterHotKey(_hwndHook, HOTKEY_DOUYIN, MOD_ALT, VK_F8);
+    BOOL registeredHotKey8 = RegisterHotKey(_hwndHook, HOTKEY_XSHELL, MOD_ALT, VK_F9);
     if (!registeredHotKey1) {
         MessageBox(NULL, L"Couldn't register Alt+F1 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
@@ -481,6 +487,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     }
     if (!registeredHotKey7) {
         MessageBox(NULL, L"Couldn't register Alt+F8 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
+    }
+    if (!registeredHotKey8) {
+        MessageBox(NULL, L"Couldn't register Alt+F9 hotkey", L"RBTray", MB_OK | MB_ICONERROR);
     }
 
     MSG msg;
@@ -509,6 +518,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     }
     if (registeredHotKey7) {
         UnregisterHotKey(_hwndHook, HOTKEY_DOUYIN);
+    }
+    if (registeredHotKey8) {
+        UnregisterHotKey(_hwndHook, HOTKEY_XSHELL);
     }
 
     return (int)msg.wParam;
