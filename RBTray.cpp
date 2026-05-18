@@ -1,21 +1,19 @@
 // ****************************************************************************
 //
 // RBTray
-// Copyright (C) 1998-2010  Nikolay Redko, J.D. Purcell
-// Copyright (C) 2015 Benbuck Nason
+// 版权所有 (C) 1998-2010  Nikolay Redko, J.D. Purcell
+// 版权所有 (C) 2015 Benbuck Nason
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
+// 本程序是自由软件;你可以根据自由软件基金会发布的
+// GNU 通用公共许可证(GPL)的条款(许可证的第 2 版,
+// 或者(由你选择)任何更高的版本)重新分发和/或修改本程序。
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// 发布本程序的目的是希望它有用,但不提供任何担保;
+// 甚至不包含适销性或对特定用途适用性的隐含担保。
+// 详情请参阅 GNU 通用公共许可证。
 //
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
+// 你应该已经随本程序收到一份 GNU 通用公共许可证的副本;
+// 如果没有,请写信给自由软件基金会:
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 // ****************************************************************************
@@ -29,7 +27,7 @@
 
 static UINT WM_TASKBAR_CREATED;
 
-// Function declarations
+// 函数声明
 int FindInTray(HWND hwnd);
 static void RestoreWindowFromTray(HWND hwnd);
 
@@ -51,22 +49,22 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
         if (GetModuleFileNameEx(hProcess, NULL, processPath, MAX_PATH)) {
             wchar_t* processName = wcsrchr(processPath, L'\\');
             if (processName) {
-                processName++; // Skip the backslash
+                processName++; // 跳过反斜杠
                 if (_wcsicmp(processName, targetProcessName) == 0) {
-                    // Found the target process, check if it's minimized to tray
+                    // 找到目标进程,检查是否已最小化到托盘
                     int trayIndex = FindInTray(hwnd);
                     if (trayIndex != -1) {
-                        // Window is in tray, restore it
+                        // 窗口在托盘中,恢复它
                         RestoreWindowFromTray(hwnd);
                         CloseHandle(hProcess);
-                        return FALSE; // Stop enumeration
+                        return FALSE; // 停止枚举
                     }
                 }
             }
         }
         CloseHandle(hProcess);
     }
-    return TRUE; // Continue enumeration
+    return TRUE; // 继续枚举
 }
 
 void ActivateApplicationFromTray(const wchar_t* processName) {
@@ -130,28 +128,28 @@ static bool AddWindowToTray(HWND hwnd) {
 }
 
 static void MinimizeWindowToTray(HWND hwnd) {
-    // Don't minimize MDI child windows
+    // 不要最小化 MDI 子窗口
     if ((UINT)GetWindowLongPtr(hwnd, GWL_EXSTYLE) & WS_EX_MDICHILD) {
         return;
     }
 
-    // If hwnd is a child window, find parent window (e.g. minimize button in
-    // Office 2007 (ribbon interface) is in a child window)
+    // 如果 hwnd 是子窗口,查找父窗口(例如 Office 2007 的最小化按钮
+    //(功能区界面)位于子窗口中)
     if ((UINT)GetWindowLongPtr(hwnd, GWL_STYLE) & WS_CHILD) {
         hwnd = GetAncestor(hwnd, GA_ROOT);
     }
 
-    // Hide window before AddWindowToTray call because sometimes RefreshWindowInTray
-    // can be called from inside ShowWindow before program window is actually hidden
-    // and as a result RemoveWindowFromTray is called which immediately removes just
-    // added tray icon.
+    // 在调用 AddWindowToTray 之前先隐藏窗口,因为有时 RefreshWindowInTray
+    // 会在 ShowWindow 内部、程序窗口尚未实际隐藏之前被调用,
+    // 从而导致 RemoveWindowFromTray 被调用,立即移除刚添加的
+    // 托盘图标。
     ShowWindow(hwnd, SW_MINIMIZE);
     ShowWindow(hwnd, SW_HIDE);
 
-    // Add icon to tray if it's not already there
+    // 如果托盘中还没有此图标,则添加
     if (FindInTray(hwnd) == -1) {
         if (!AddWindowToTray(hwnd)) {
-          // If there is something wrong with tray icon restore program window.
+          // 如果托盘图标出现问题,则恢复程序窗口。
           ShowWindow(hwnd, SW_RESTORE);
           ShowWindow(hwnd, SW_SHOW);
           SetForegroundWindow(hwnd);
@@ -192,8 +190,8 @@ static void RestoreWindowFromTray(HWND hwnd) {
 }
 
 static void CloseWindowFromTray(HWND hwnd) {
-    // Use PostMessage to avoid blocking if the program brings up a dialog on exit.
-    // Also, Explorer windows ignore WM_CLOSE messages from SendMessage.
+    // 使用 PostMessage 以避免在程序退出时弹出对话框而导致阻塞。
+    // 另外,Explorer 窗口会忽略 SendMessage 发送的 WM_CLOSE 消息。
     PostMessage(hwnd, WM_CLOSE, 0, 0);
 
     Sleep(50);
@@ -202,7 +200,7 @@ static void CloseWindowFromTray(HWND hwnd) {
     }
 
     if (!IsWindow(hwnd)) {
-        // Closed successfully
+        // 关闭成功
         RemoveWindowFromTray(hwnd);
     }
 }
@@ -237,7 +235,7 @@ void ExecuteMenu() {
     }
     AppendMenu(hMenu, MF_STRING, IDM_ABOUT,   L"About RBTray");
     AppendMenu(hMenu, MF_STRING, IDM_EXIT,    L"Exit RBTray");
-    AppendMenu(hMenu, MF_SEPARATOR, 0, NULL); //--------------
+    AppendMenu(hMenu, MF_SEPARATOR, 0, NULL); //--------------分隔符
     AppendMenu(hMenu, MF_STRING, IDM_CLOSE,   L"Close Window");
     AppendMenu(hMenu, MF_STRING, IDM_RESTORE, L"Restore Window");
 
@@ -323,7 +321,7 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 
                     LONG style = GetWindowLong(fgWnd, GWL_STYLE);
                     if (!(style & WS_MINIMIZEBOX)) {
-                        // skip, no minimize box
+                        // 跳过,没有最小化按钮
                         break;
                     }
 
@@ -458,7 +456,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
 
     WM_TASKBAR_CREATED = RegisterWindowMessage(L"TaskbarCreated");
 
-    // BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN);
+    // BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT | MOD_CONTROL, VK_DOWN); // 旧的快捷键注册
     BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT, VK_F1);
     BOOL registeredHotKey2 = RegisterHotKey(_hwndHook, HOTKEY_CHROME, MOD_ALT, VK_F2);
     BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_CURSOR, MOD_ALT, VK_F3);
