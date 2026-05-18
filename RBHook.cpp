@@ -92,7 +92,7 @@ LRESULT CALLBACK CallWndProcRet(int nCode, WPARAM wParam, LPARAM lParam) {
     return CallNextHookEx(_hWndProcRet, nCode, wParam, lParam);
 }
 
-BOOL DLLIMPORT RegisterHook(HMODULE hLib) {
+BOOL DLLEXPORT RegisterHook(HMODULE hLib) {
     //DEBUG_PRINTF("%s(%d): register hook\n", __FUNCTION__, __LINE__);
     _hMouse = SetWindowsHookEx(WH_MOUSE, (HOOKPROC)MouseProc, hLib, 0);
     _hWndProcRet = SetWindowsHookEx(WH_CALLWNDPROCRET, (HOOKPROC)CallWndProcRet, hLib, 0);
@@ -103,7 +103,7 @@ BOOL DLLIMPORT RegisterHook(HMODULE hLib) {
     return TRUE;
 }
 
-void DLLIMPORT UnRegisterHook() {
+void DLLEXPORT UnRegisterHook() {
     //DEBUG_PRINTF("%s(%d): unregister hook\n", __FUNCTION__, __LINE__);
     if (_hMouse) {
         UnhookWindowsHookEx(_hMouse);

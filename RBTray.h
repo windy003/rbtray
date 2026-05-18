@@ -38,7 +38,7 @@
 #define HOTKEY_DOUYIN 6
 #define HOTKEY_XSHELL 7
 
-#define DLLIMPORT __declspec(dllexport)
+#define DLLEXPORT __declspec(dllexport)
 
-BOOL DLLIMPORT RegisterHook(HMODULE);
-void DLLIMPORT UnRegisterHook();
+BOOL DLLEXPORT RegisterHook(HMODULE);
+void DLLEXPORT UnRegisterHook();
