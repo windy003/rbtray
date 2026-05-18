@@ -32,7 +32,6 @@ int FindInTray(HWND hwnd);
 static void RestoreWindowFromTray(HWND hwnd);
 
 static HINSTANCE _hInstance;
-static HMODULE _hLib;
 static HWND _hwndHook;
 static HWND _hwndItems[MAXTRAYITEMS];
 static HWND _hwndForMenu;
@@ -287,15 +286,6 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
                     break;
             }
             break;
-        case WM_ADDTRAY:
-            MinimizeWindowToTray((HWND)lParam);
-            break;
-        case WM_REMTRAY:
-            RestoreWindowFromTray((HWND)lParam);
-            break;
-        case WM_REFRTRAY:
-            RefreshWindowInTray((HWND)lParam);
-            break;
         case WM_TRAYCMD:
             switch ((UINT)lParam) {
                 case NIN_SELECT:
@@ -372,10 +362,6 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
                     RestoreWindowFromTray(_hwndItems[i]);
                 }
             }
-            if (_hLib) {
-                UnRegisterHook();
-                FreeLibrary(_hLib);
-            }
             PostQuitMessage(0);
             break;
         default:
@@ -398,13 +384,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     int argc;
     LPWSTR * argv = CommandLineToArgvW(GetCommandLineW(), &argc);
     bool shouldExit = false;
-    bool useHook = true;
     for (int a = 0; a < argc; ++a) {
         if (!wcscmp(argv[a], L"--exit")) {
             shouldExit = true;
-        }
-        if (!wcscmp(argv[a], L"--no-hook")) {
-            useHook = false;
         }
     }
 
@@ -416,17 +398,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
             MessageBox(NULL, L"RBTray is already running.", L"RBTray", MB_OK | MB_ICONINFORMATION);
         }
         return 0;
-    }
-
-    if (useHook) {
-        if (!(_hLib = LoadLibrary(L"RBHook.dll"))) {
-            MessageBox(NULL, L"Error loading RBHook.dll.", L"RBTray", MB_OK | MB_ICONERROR);
-            return 0;
-        }
-        if (!RegisterHook(_hLib)) {
-            MessageBox(NULL, L"Error setting hook procedure.", L"RBTray", MB_OK | MB_ICONERROR);
-            return 0;
-        }
     }
 
     WNDCLASS wc;

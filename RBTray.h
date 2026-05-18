@@ -20,9 +20,6 @@
 
 #define NAME L"RBTrayHook"
 
-#define WM_ADDTRAY  0x0401
-#define WM_REMTRAY  0x0402
-#define WM_REFRTRAY 0x0403
 #define WM_TRAYCMD  0x0404
 #define IDM_RESTORE 0x1001
 #define IDM_CLOSE   0x1002
@@ -37,8 +34,3 @@
 #define HOTKEY_ANDROID_STUDIO 5
 #define HOTKEY_DOUYIN 6
 #define HOTKEY_XSHELL 7
-
-#define DLLEXPORT __declspec(dllexport)
-
-BOOL DLLEXPORT RegisterHook(HMODULE);
-void DLLEXPORT UnRegisterHook();
