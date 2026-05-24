@@ -328,9 +328,9 @@ LRESULT CALLBACK HookWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
                     ActivateApplicationFromTray(L"cursor.exe");
                     break;
                 }
-                case HOTKEY_EXPLORER:
+                case HOTKEY_MSTSC:
                 {
-                    ActivateApplicationFromTray(L"explorer.exe");
+                    ActivateApplicationFromTray(L"mstsc.exe");
                     break;
                 }
                 case HOTKEY_WINDOWS_TERMINAL:
@@ -431,7 +431,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
     BOOL registeredHotKey1 = RegisterHotKey(_hwndHook, HOTKEY_MINIMIZE, MOD_ALT, VK_F1);
     BOOL registeredHotKey2 = RegisterHotKey(_hwndHook, HOTKEY_CHROME, MOD_ALT, VK_F2);
     BOOL registeredHotKey3 = RegisterHotKey(_hwndHook, HOTKEY_CURSOR, MOD_ALT, VK_F3);
-    BOOL registeredHotKey4 = RegisterHotKey(_hwndHook, HOTKEY_EXPLORER, MOD_ALT, VK_F5);
+    BOOL registeredHotKey4 = RegisterHotKey(_hwndHook, HOTKEY_MSTSC, MOD_ALT, VK_F5);
     BOOL registeredHotKey5 = RegisterHotKey(_hwndHook, HOTKEY_WINDOWS_TERMINAL, MOD_ALT, VK_F6);
     BOOL registeredHotKey6 = RegisterHotKey(_hwndHook, HOTKEY_ANDROID_STUDIO, MOD_ALT, VK_F7);
     BOOL registeredHotKey7 = RegisterHotKey(_hwndHook, HOTKEY_DOUYIN, MOD_ALT, VK_F8);
@@ -477,7 +477,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hPrevInstance*
         UnregisterHotKey(_hwndHook, HOTKEY_CURSOR);
     }
     if (registeredHotKey4) {
-        UnregisterHotKey(_hwndHook, HOTKEY_EXPLORER);
+        UnregisterHotKey(_hwndHook, HOTKEY_MSTSC);
     }
     if (registeredHotKey5) {
         UnregisterHotKey(_hwndHook, HOTKEY_WINDOWS_TERMINAL);
