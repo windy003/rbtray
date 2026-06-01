@@ -1,0 +1,1 @@
+start /b pythonw D:\files\using\rbtray\Python_Version\rbtray.py
