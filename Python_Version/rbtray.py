@@ -283,8 +283,8 @@ class RBTray:
     # -------------------------------------------------------------------
     def execute_menu(self):
         menu = win32gui.CreatePopupMenu()
-        win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_ABOUT,   "About RBTray")
-        win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_EXIT,    "Exit RBTray")
+        win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_ABOUT,   "About Py_Rbtray")
+        win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_EXIT,    "Exit Py_Rbtray")
         win32gui.AppendMenu(menu, win32con.MF_SEPARATOR, 0, "")
         win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_CLOSE,   "Close Window")
         win32gui.AppendMenu(menu, win32con.MF_STRING, IDM_RESTORE, "Restore Window")
@@ -324,7 +324,10 @@ class RBTray:
         elif msg == WM_TRAYCMD:
             event = lparam
             index = wparam
-            if event == NIN_SELECT:
+            # 未调用 NIM_SETVERSION 时,托盘图标处于旧版模式:
+            #   左键单击 -> WM_LBUTTONUP, 右键单击 -> WM_RBUTTONUP。
+            # 同时兼容新版的 NIN_SELECT,保证两种模式都能恢复窗口。
+            if event == NIN_SELECT or event == win32con.WM_LBUTTONUP:
                 self.restore_window_from_tray(self.hwnd_items[index])
             elif event == win32con.WM_CONTEXTMENU or event == win32con.WM_RBUTTONUP:
                 self.hwnd_for_menu = self.hwnd_items[index]
