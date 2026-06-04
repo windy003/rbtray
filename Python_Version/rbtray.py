@@ -85,7 +85,7 @@ HOTKEYS = [
     (HOTKEY_MSTSC,            win32con.MOD_ALT, win32con.VK_F5, "mstsc.exe"),
     (HOTKEY_WINDOWS_TERMINAL, win32con.MOD_ALT, win32con.VK_F6, "WindowsTerminal.exe"),
     (HOTKEY_ANDROID_STUDIO,   win32con.MOD_ALT, win32con.VK_F7, "studio64.exe"),
-    (HOTKEY_DOUYIN,           win32con.MOD_ALT, win32con.VK_F8, "douyin.exe"),
+    (HOTKEY_DOUYIN,           win32con.MOD_ALT, win32con.VK_F8, "explorer.exe"),
     (HOTKEY_XSHELL,           win32con.MOD_ALT, win32con.VK_F9, "Xshell.exe"),
 ]
 
