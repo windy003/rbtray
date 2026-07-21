@@ -1,1 +1,1 @@
-start /b pythonw D:\files\using\rbtray\Python_Version\rbtray.py
+start /b pythonw "D:\files\using\Python\rbtray\Python_Version\rbtray.py"
