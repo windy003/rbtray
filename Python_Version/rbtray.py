@@ -56,9 +56,9 @@ IDM_ABOUT   = 0x1004
 HOTKEY_MINIMIZE         = 0
 HOTKEY_CHROME           = 1
 HOTKEY_CURSOR           = 2
-HOTKEY_MSTSC            = 3
+HOTKEY_ANDROID_STUDIO   = 3
 HOTKEY_WINDOWS_TERMINAL = 4
-HOTKEY_ANDROID_STUDIO   = 5
+HOTKEY_MSTSC            = 5
 HOTKEY_DOUYIN           = 6
 HOTKEY_XSHELL           = 7
 
@@ -82,10 +82,10 @@ HOTKEYS = [
     (HOTKEY_MINIMIZE,         win32con.MOD_ALT, win32con.VK_F1, None),
     (HOTKEY_CHROME,           win32con.MOD_ALT, win32con.VK_F2, "chrome.exe"),
     (HOTKEY_CURSOR,           win32con.MOD_ALT, win32con.VK_F3, "cursor.exe"),
-    (HOTKEY_MSTSC,            win32con.MOD_ALT, win32con.VK_F5, "mstsc.exe"),
+    (HOTKEY_ANDROID_STUDIO,   win32con.MOD_ALT, win32con.VK_F5, "studio64.exe"),
     (HOTKEY_WINDOWS_TERMINAL, win32con.MOD_ALT, win32con.VK_F6, "WindowsTerminal.exe"),
-    (HOTKEY_ANDROID_STUDIO,   win32con.MOD_ALT, win32con.VK_F7, "studio64.exe"),
-    (HOTKEY_DOUYIN,           win32con.MOD_ALT, win32con.VK_F8, "explorer.exe"),
+    (HOTKEY_MSTSC,            win32con.MOD_ALT, win32con.VK_F7, "mstsc.exe"),
+    (HOTKEY_DOUYIN,           win32con.MOD_ALT, win32con.VK_F8, "douyin.exe"),
     (HOTKEY_XSHELL,           win32con.MOD_ALT, win32con.VK_F9, "Xshell.exe"),
 ]
 

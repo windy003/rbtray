@@ -1,1 +1,1 @@
-start /b pythonw "D:\files\using\Python\rbtray\Python_Version\rbtray.py"
+start /b "" "D:\files\using\python\rbtray\Python_Version\.venv\Scripts\pythonw.exe" "D:\files\using\Python\rbtray\Python_Version\rbtray.py"
