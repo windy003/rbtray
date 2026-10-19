@@ -60,7 +60,8 @@ HOTKEY_ANDROID_STUDIO   = 3
 HOTKEY_XSHELL           = 4
 HOTKEY_MSTSC            = 5
 HOTKEY_DOUYIN           = 6
-# HOTKEY_XSHELL           = 7
+HOTKEY_EXPLORER         = 7
+HOTKEY_WINDOWSS_TERMINAL = 8
 
 # 托盘回调消息中的事件类型 (Shell_NotifyIcon version 3)
 NIN_SELECT = win32con.WM_USER + 0   # 0x0400, 单击托盘图标
@@ -83,10 +84,9 @@ HOTKEYS = [
     (HOTKEY_CHROME,           win32con.MOD_ALT, win32con.VK_F2, "chrome.exe"),
     (HOTKEY_CURSOR,           win32con.MOD_ALT, win32con.VK_F3, "cursor.exe"),
     (HOTKEY_ANDROID_STUDIO,   win32con.MOD_ALT, win32con.VK_F5, "studio64.exe"),
-    (HOTKEY_XSHELL, win32con.MOD_ALT, win32con.VK_F6, "Xshell.exe"),
-    (HOTKEY_MSTSC,            win32con.MOD_ALT, win32con.VK_F7, "mstsc.exe"),
-    (HOTKEY_DOUYIN,           win32con.MOD_ALT, win32con.VK_F8, "douyin.exe"),
-    # (HOTKEY_XSHELL,           win32con.MOD_ALT, win32con.VK_F9, "Xshell.exe"),
+    (HOTKEY_XSHELL,            win32con.MOD_ALT, win32con.VK_F6, "Xshell.exe"),
+    (HOTKEY_EXPLORER,         win32con.MOD_ALT, win32con.VK_F7, "explorer.exe"),
+    (HOTKEY_WINDOWSS_TERMINAL, win32con.MOD_ALT, win32con.VK_F8, "WindowsTerminal.exe"),
 ]
 
 
